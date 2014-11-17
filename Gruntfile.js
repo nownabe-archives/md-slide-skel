@@ -77,10 +77,13 @@ module.exports = function(grunt) {
 		},
 
 		connect: {
-			server: {
+			livereload: {
 				options: {
 					port: port,
-					base: '.'
+					hostname: 'localhost',
+					base: '.',
+					open: true,
+					livereload: true
 				}
 			}
 		},
@@ -97,13 +100,9 @@ module.exports = function(grunt) {
 		},
 
 		watch: {
-			main: {
-				files: [ 'Gruntfile.js', 'js/reveal.js', 'css/reveal.css' ],
-				tasks: 'default'
-			},
-			theme: {
-				files: [ 'css/theme/source/*.scss', 'css/theme/template/*.scss' ],
-				tasks: 'themes'
+			livereload: {
+				files: [ 'index.html', 'slides/*.md' ],
+				options: { livereload: true }
 			}
 		}
 
@@ -120,18 +119,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks( 'grunt-zip' );
 
 	// Default task
-	grunt.registerTask( 'default', [ 'jshint', 'cssmin', 'uglify', 'qunit' ] );
-
-	// Theme task
-	grunt.registerTask( 'themes', [ 'sass' ] );
-
-	// Package presentation to archive
-	grunt.registerTask( 'package', [ 'default', 'zip' ] );
-
-	// Serve presentation locally
-	grunt.registerTask( 'serve', [ 'connect', 'watch' ] );
-
-	// Run tests
-	grunt.registerTask( 'test', [ 'jshint', 'qunit' ] );
+	grunt.registerTask( 'default', [ 'connect:livereload', 'watch' ] );
 
 };
